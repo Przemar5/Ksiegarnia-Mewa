@@ -1,0 +1,36 @@
+.table {
+	table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: none;
+    overflow: scroll;
+
+    thead tr,
+    tbody tr:nth-child(even) {
+        background-color: darken(white, 6%);
+    }
+
+    th,
+    td {
+    	padding: .5rem 1rem;
+    }
+}
+
+
+.table-responsive {
+	display: block;
+	width: 100%;
+	overflow-x: auto;
+}
+
+
+.table-hovered {
+
+    tbody tr:nth-child(odd):hover {
+	   background-color: darken(white, 3%);
+    }
+
+    tbody tr:nth-child(even):hover {
+        background-color: darken(white, 9%);
+    }
+}

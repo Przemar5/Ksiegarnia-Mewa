@@ -1,0 +1,70 @@
+.modal {
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    display: block;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 80rem;
+    background-color: $color-light;
+    border-radius: 4px;
+    max-height: 75vh;
+    z-index: 2000;
+
+    &__header {
+        background-color: $color-secondary;
+        color: $color-light;
+        display: flex;
+        flex-direction: row;
+	    justify-content: center;
+        align-content: center;
+        padding: .75rem 1rem;
+        border-radius: 4px 4px 0 0;
+    }
+
+    &__title {
+    	display: flex;
+	    flex-direction: row;
+        justify-content: center;
+	    align-content: center;
+        text-algin: center;
+        padding: {
+            left: 1.5rem;
+            right: 4.5rem;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        float: right;
+        display: block;
+        top: 0rem;
+        right: 1rem;
+        z-index: 1000;
+        border: none;
+        border-radius: 100rem;
+        background-color: $color-primary;
+        color: white;
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        transform-origin: center center;
+    }
+
+    &__content {
+        padding: 2rem 2.5rem;
+        overflow: auto;
+        max-height: calc(75vh - 5rem);
+        border: 2px solid $color-secondary;
+    }
+
+    p {
+        display: block;
+        margin-top: .75rem;
+        margin-bottom: .75rem;
+    }
+
+    button {
+        margin-top: 1rem;
+    }
+}

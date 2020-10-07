@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Gatunki{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">Gatunki</h2>
+
+		<label class="form__control">
+			<span class="form__control-title">Szukaj</span>
+			<input type="search" id="genreSearch" class="form__control-input">
+		</label>
+
+		{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{ path('genre_create') }}" class="d-block mt-3 mb-4">Dodaj nowy gatunek</a>
+		{% endif %}
+
+		<table class="table table-responsive table-hovered" id="genresTable">
+	        <thead>
+	            <tr>
+	                <th>Id</th>
+	                <th>Nazwa</th>
+	                <th>Data rozpoczęcia</th> 
+	                <th>Data zakończenia</th> 
+	                <th>Miejsce powstania</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	        {% for genre in genres %}
+	            <tr>
+	                <td>
+	                	<a href="{{ path('genre_show', {'id': genre.id}) }}">
+	                		{{ genre.id }}
+	                	</a>
+	                </td>
+	                <td>{{ genre.name }}</td>
+	                <td>{{ genre.startedAt }}</td>
+	                <td>{{ genre.endedAt }}</td>
+	                <td>{{ genre.origin }}</td>
+	            </tr>
+	        {% else %}
+	            <tr>
+	                <td colspan="5">Nie znaleziono żadnych gatunków</td>
+	            </tr>
+	        {% endfor %}
+	        </tbody>
+	    </table>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		const genresTable = document.getElementById('genresTable')
+		const tableBody = genresTable.querySelector('tbody')
+		const allTableRows = genresTable.querySelectorAll('tbody tr')
+		const input = document.querySelector('#genreSearch')
+
+		input.addEventListener('keyup', function () {
+			let word = this.value.trim()
+			let regex = new RegExp('^'+escape(word), 'iu')
+			let rows = Array.from(allTableRows).filter(function (row) {
+				return regex.test(row.querySelectorAll('td')[1].innerText.trim()) 
+			}).map(function (row) {
+				console.log(row.innerHTML)
+				return '<tr>' + row.innerHTML + '</tr>'
+			})
+			let noResults = '<tr><td colspan="5">Nie znaleziono żadnych gatunków</td></tr>'
+			
+			tableBody.innerHTML = (rows.length > 0) ? rows.join('') : noResults
+		})
+	</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+<section class="section">
+	<article id="booksContainer">
+		{% if books|length > 0 %}
+			{% for book in books %}
+				{% include('book/_tile.html.twig') %}
+			{% endfor %}
+		{% else %}
+			<h3>Nie znaleziono rezultatów</h3>
+		{% endif %}
+
+		{% if not is_granted('ROLE_USER') %}
+			{% include 'includes/_modal.html.twig' with {
+				'id': 'accessDeniedModal', 
+				'header': 'Zaloguj się, aby zamawiać!',
+				'content': '<a href="' ~ path('app_login') ~ '">Zaloguj się</a> lub <a href="' ~ path('app_register') ~ '">zarejestruj</a> żeby móc dokonywać zamówień.'
+			} %}
+		{% endif %}
+	</article>
+
+    <footer class="nav my-3 px-3 text-center">
+        {{ pagination.render()|raw }}
+    </footer>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+	{% if not is_granted('ROLE_USER') %}
+		<script>
+			const modal = document.getElementById('accessDeniedModal')
+			const controls = document.querySelectorAll('.book-tile__btn-group')
+
+			controls.forEach(function (control) {
+				control.addEventListener('click', function (e) {
+					e.preventDefault()
+					modal.classList.remove('d-none')
+				})
+			})
+
+			modal.classList.add('d-none')
+		</script>
+	{% endif %}
+{% endblock %}

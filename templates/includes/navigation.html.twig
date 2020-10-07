@@ -1,0 +1,29 @@
+<!-- Navigation -->
+<nav class="navigation bg-secondary text-secondary">
+    <a href="{{ path('home') }}" class="navigation__home btn btn-primary btn-circle" title="Strona domowa">
+        <span class="fas fa-home"></span>
+    </a>
+    
+    <form class="navigation__search-form" action="{{ path('home') }}" method="get" id="searchForm">
+        <input type="search" name="tytul" class="navigation__search-input" title="Szukaj książki" placeholder="Szukana książka...">
+        <button type="submit" class="navigation__search-submit btn btn-primary btn-circle" title="Szukaj">
+            <span class="fas fa-search"></span>
+        </button>
+    </form>
+
+    <a href="{{ path('home') }}" id="searchShow" class="btn btn-primary btn-circle" title="Szukaj">
+        <span class="fas fa-search"></span>
+    </a>
+
+    <a href="{{ (is_granted('ROLE_USER')) ? path('user_show', {'id': app.user.id}) : path('app_login') }}" class="btn btn-primary btn-circle ml-2" title="{{ (is_granted('ROLE_USER')) ? 'Profil' : 'Zaloguj się' }}">
+        <span class="fas fa-user"></span>
+    </a>
+
+    <a href="{{ path('order_show') }}" id="shoppingCart" class="navigation__shopping btn btn-primary btn-circle ml-2" title="Zakupy">
+        {% set count = (app.session.get('order') is defined and app.session.get('order')|length > 0) ? app.session.get('order')|reduce((carry, v) => carry + v) : 0 %}
+        <span class="navigation__shopping-cart fas fa-shopping-cart"></span>
+        <span class="navigation__shopping-items-count {{ (count == 0) ? 'd-none' : '' }}">
+            {{ count }}
+        </span>
+    </a>
+</nav>

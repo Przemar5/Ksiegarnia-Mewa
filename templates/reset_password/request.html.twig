@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Odzyskiwanie hasła{% endblock %}
+
+{% block main %}
+    <section class="section password-request center">
+        {% for flashError in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+        {% endfor %}
+        
+        <h2 class="section__header">Odzyskiwanie hasła</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(requestForm, {'attr': {'class': 'form'}}) }}
+            {{ form.input(requestForm.email) }}
+
+            <button class="btn btn-primary form__submit">Wyślij email do zmainy hasła</button>
+        {{ form_end(requestForm) }}
+    </section>
+{% endblock %}

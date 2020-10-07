@@ -1,0 +1,15 @@
+main {
+	display: flex;
+	padding: 2.25rem 1.5rem;
+	margin: {
+		left: auto;
+		right: auto;
+	}
+	width: calc(100% - #{$width-aside});
+}
+
+@media screen and (max-width: 750px) {
+	main {
+		width: 100%;
+	}
+}

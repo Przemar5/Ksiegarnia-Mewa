@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - {{ book.title }}{% endblock %}
+
+{% block aside %}
+      {% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+    <section class="section">
+        <h2 class="section__header">{{ book.title }}</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(bookForm, {'attr': {'class': 'form book__form'}}) }}
+            {{ form_widget(bookForm._token) }}
+            {{ form.input(bookForm.title) }}
+            {{ form.input(bookForm.isbn) }}
+            {{ form.input(bookForm.releasedAt) }}
+            {{ form.checkbox(bookForm.available) }}
+            {{ form.input(bookForm.quantity) }}
+            {{ form.input(bookForm.reserved) }}
+            {{ form.input(bookForm.description) }}
+            {{ form.input(bookForm.price) }}
+            {{ form.input(bookForm.coverType) }}
+            {{ form.input(bookForm.coverImage) }}
+            {{ form.checkbox(bookForm.deleteCover) }}
+            {{ form.input(bookForm.author) }}
+            {{ form.input(bookForm.genres) }}
+            {{ form.input(bookForm.tags) }}
+            
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">Zapisz</button>
+
+            <a href="{{ path('book_show', {'id': book.id}) }}" class="d-inline-block mb-2 mr-2">Pokaż dane książki</a>
+            
+            <a href="{{ path('book_delete', {'id': book.id}) }}" class="d-inline-block mb-2 text-danger">
+                Usuń książkę
+            </a>
+
+            <a href="{{ path('book_index') }}" class="d-block mb-4">Index książek</a>
+        {{ form_end(bookForm, {'render_rest': false}) }}
+    </section>  
+{% endblock %}

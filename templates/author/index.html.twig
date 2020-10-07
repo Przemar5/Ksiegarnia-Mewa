@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Autorzy{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">Autorzy</h2>
+
+		<label class="form__control">
+			<span class="form__control-title">Szukaj</span>
+			<input type="search" id="authorSearch" class="form__control-input">
+		</label>
+
+		{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{ path('author_create') }}" class="d-block mt-3 mb-4">Dodaj nowego autora</a>
+		{% endif %}
+
+		<table class="table table-responsive table-hovered" id="authorsTable">
+	        <thead>
+	            <tr>
+	                <th>Id</th>
+	                <th>Imię i nazwisko</th>
+	                <th>Pseudonim</th>
+	                <th>Urodzony/a</th>
+	                <th>Zmarły/a</th>
+	                <th>Kraj pochodzenia</th>
+	                <th>Gatunki</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	        {% for author in authors %}
+	            <tr>
+	                <td>
+	                	<a href="{{ path('author_show', {'id': author.id}) }}">
+	                		{{ author.id }}
+	                	</a>
+	                </td>
+	                <td>{{ author.name ~ ' ' ~ author.surname }}</td>
+	                <td>{{ author.pseudonym }}</td>
+	                <td>{{ author.born }}</td>
+	                <td>{{ author.died }}</td>
+	                <td>{{ author.country }}</td>
+	                <td>
+	                	{% for genre in author.genres %}
+		 	            	<a href="{{ path('genre_show', {'id': genre.id}) }}" class="d-inline-block m-1">
+		                		{{ genre }}
+		                	</a> 
+		                {% endfor %}
+	                </td>
+	            </tr>
+	        {% else %}
+	            <tr>
+	                <td colspan="7">Nie znaleziono żadnych autorów</td>
+	            </tr>
+	        {% endfor %}
+	        </tbody>
+	    </table>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		const authorsTable = document.getElementById('authorsTable')
+		const tableBody = authorsTable.querySelector('tbody')
+		const allTableRows = authorsTable.querySelectorAll('tbody tr')
+		const input = document.querySelector('#authorSearch')
+
+		input.addEventListener('keyup', function () {
+			let word = this.value.trim()
+			let regex = new RegExp('^'+escape(word), 'iu')
+			let rows = Array.from(allTableRows).filter(function (row) {
+				return regex.test(row.querySelectorAll('td')[1].innerText.trim()) 
+			}).map(function (row) {
+				console.log(row.innerHTML)
+				return '<tr>' + row.innerHTML + '</tr>'
+			})
+			let noResults = '<tr><td colspan="5">Nie znaleziono żadnych autorów</td></tr>'
+			
+			tableBody.innerHTML = (rows.length > 0) ? rows.join('') : noResults
+		})
+	</script>
+{% endblock %}

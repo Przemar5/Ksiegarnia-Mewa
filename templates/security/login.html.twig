@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Logowanie{% endblock %}
+
+{% block main %}
+    <section class="section login center">
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                Jesteś zalogowany jako {{ app.user.username }}. <a href="{{ path('app_logout') }}">Wyloguj</a>
+            </div>
+        {% endif %}
+
+        <h2 class="section__header">Zaloguj się</h2>
+        
+        <form method="post" class="form login__form">
+            <label class="form__control">
+                <span class="form__control-title">Email</span>
+                <input type="email" value="{{ last_username }}" name="email" class="form__control-input" required autofocus>
+            </label>
+
+            <label class="form__control">
+                <span class="form__control-title">Hasło</span>
+                <input type="password" name="password" class="form__control-input" required>
+            </label>
+
+            <label class="form__control">
+                <input type="checkbox" name="_remember_me"> Zapamiętaj mnie
+            </label>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">
+                Zaloguj
+            </button>
+
+            Nie masz konta? <a href="{{ path('app_register') }}">Zarejestruj się!</a>
+        </form>
+    </section>
+{% endblock %}

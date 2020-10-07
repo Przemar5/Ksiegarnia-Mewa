@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Książki{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">Książki</h2>
+
+		<label class="form__control">
+			<span class="form__control-title">Szukaj</span>
+			<input id="bookSearch" name="books" class="form__control-input">
+		</label>
+
+		{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{ path('book_create') }}" class="d-block mt-3 mb-4">Dodaj nową książkę</a>
+		{% endif %}
+		
+		<table class="table table-responsive table-hovered" id="booksTable">
+	        <thead>
+	            <tr>
+	                <th>Id</th>
+	                <th>Tytuł</th>
+	                <th>ISBN</th> 
+	                <th>Autor</th>
+	                <th>Wydano</th> 
+	                <th>Dostępna</th> 
+	                <th>Ilość w magazynie</th>
+	                <th>Cena</th>
+	                <th>okładka</th>
+	                <th>Gatunki</th>
+	                <th>Tagi</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	        {% for book in books %}
+	            <tr>
+	                <td>
+	                	<a href="{{ path('book_show', {'id': book.id}) }}">
+	                		{{ book.id }}
+	                	</a>
+	                </td>
+	                <td>{{ book.title }}</td>
+	                <td>{{ book.isbn }}</td>
+	                <td>{{ book.author }}</td>
+	                <td>{{ book.releasedAt }}</td>
+	                <td>{{ book.available }}</td>
+	                <td>{{ book.quantity }}</td>
+	                <td>{{ book.price }}</td>
+	                <td>{{ book.cover }}</td>
+	                <td>
+	                	{% for genre in book.genres %}
+		 	            	<a href="{{ path('genre_show', {'id': genre.id}) }}">
+		                		{{ genre }}
+		                	</a> 
+		                {% endfor %}
+	                </td>
+	                <td>
+	                	{% for tag in book.tags %}
+		 	            	<a href="{{ path('tag_show', {'id': tag.id}) }}">
+		                		#{{ tag }}
+		                	</a> 
+		                {% endfor %}
+	                </td>
+	            </tr>
+	        {% else %}
+	            <tr>
+	                <td colspan="11">Nie znaleziono żadnych autorów</td>
+	            </tr>
+	        {% endfor %}
+	        </tbody>
+	    </table>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		const booksTable = document.getElementById('booksTable')
+		const tableBody = booksTable.querySelector('tbody')
+		const allTableRows = booksTable.querySelectorAll('tbody tr')
+		const input = document.querySelector('#bookSearch')
+
+		input.addEventListener('keyup', function () {
+			let word = this.value.trim()
+			let regex = new RegExp('^'+escape(word), 'iu')
+			let rows = Array.from(allTableRows).filter(function (row) {
+				return regex.test(row.querySelectorAll('td')[1].innerText.trim()) 
+			}).map(function (row) {
+				console.log(row.innerHTML)
+				return '<tr>' + row.innerHTML + '</tr>'
+			})
+			let noResults = '<tr><td colspan="5">Nie znaleziono żadnych książek</td></tr>'
+			
+			tableBody.innerHTML = (rows.length > 0) ? rows.join('') : noResults
+		})
+	</script>
+{% endblock %}

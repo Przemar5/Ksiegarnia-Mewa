@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Rejestracja{% endblock %}
+
+{% block main %}
+    <section class="section registration center">
+        {% for flashError in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ flashError }}
+            </div>
+        {% endfor %}
+
+        <h2 class="section__header">Rejestracja</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(registrationForm, {'attr': {'class': 'form registration__form'}}) }}
+            {{ form_widget(registrationForm._token) }}
+            {{ form.input(registrationForm.email) }}
+            {{ form.input(registrationForm.name) }}
+            {{ form.input(registrationForm.surname) }}
+            {{ form.radios(registrationForm.gender) }}
+            {{ form.input(registrationForm.birth) }}
+            {{ form.input(registrationForm.country) }}
+            {{ form.input(registrationForm.city) }}
+            {{ form.input(registrationForm.address) }}
+            {{ form.input(registrationForm.postalCode) }}
+            {{ form.input(registrationForm.phone) }}
+            {{ form.input(registrationForm.additionalPhone) }}
+            {{ form.repeated(registrationForm.password) }}
+            {{ form.checkbox(registrationForm.agreeTerms, 'Akceptuję <a href="javascript:regulationsModal.classList.remove(`d-none`);">warunki rejestracji</a>') }}
+
+            {% include('includes/regulations_modal.html.twig') %}
+            
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">Zapisz</button>
+
+            Masz już konto? <a href="{{ path('app_login') }}">Zaloguj się!</a>
+        {{ form_end(registrationForm, {'render_rest': false}) }}
+    </section>
+{% endblock %}

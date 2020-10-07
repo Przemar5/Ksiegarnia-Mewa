@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Tagi{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">Tagi</h2>
+
+		<label class="form__control">
+			<span class="form__control-title">Szukaj</span>
+			<input type="search" id="tagSearch" class="form__control-input">
+		</label>
+
+		{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{ path('tag_create') }}" class="d-block mt-3 mb-4">Dodaj nowy tag</a>
+		{% endif %}
+
+		<div id="tagContainer">
+			{% for tag in tags %}
+				<a href="{{ path('tag_show', {'id': tag.id}) }}" class="tag btn btn-outline-primary mr-1 mb-1 d-inline-block">{{ tag.name }}</a>
+			{% endfor %}
+		</div>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		const allTags = document.querySelectorAll('.tag')
+		const input = document.querySelector('#tagSearch')
+		const container = document.getElementById('tagContainer')
+
+		input.addEventListener('keyup', function () {
+			let word = this.value.trim()
+			let regex = new RegExp('^'+escape(word), 'iu')
+			let tags = Array.from(allTags).filter(function (tag) {
+				return regex.test(tag.innerText) 
+			}).map(function (tag) {
+				return tag.outerHTML
+			})
+			let noResults = '<p class="no-results">Nie znaleziono żadnych tagów.</p>'
+			container.innerHTML = (tags.length > 0) ? tags.join('') : noResults
+		})
+	</script>
+{% endblock %}

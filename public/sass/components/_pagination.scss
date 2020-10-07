@@ -1,0 +1,45 @@
+.pagination {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-content: center;
+	border-radius: 5px;
+	overflow: hidden;
+	width: min-content;
+	text-align: center;
+
+	&__divider,
+	&__first,
+	&__previous,
+	&__page,
+	&__next,
+	&__last {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-content: center;
+		width: 3.5rem;
+		height: 3.5rem;
+		font-weight: 700;
+		text-decoration: none;
+
+		& > span {
+			line-height: 3.5rem;
+		}
+	}
+
+	&__page {
+		line-height: 3.5rem;
+	}
+
+	&__first,
+	&__previous,
+	&__page,
+	&__next,
+	&__last {
+		&:focus,
+		&:hover {
+			background-color: $color-grey-light;
+		}
+	}
+}

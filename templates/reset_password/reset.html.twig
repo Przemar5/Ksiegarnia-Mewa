@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Utwórz nowe hasło{% endblock %}
+
+{% block main %}
+	<section class="section reset-password center">
+	    <h2 class="section__header">Resetuj hasło</h2>
+
+	    {% import 'macros/form.html.twig' as form %}
+
+	    {{ form_start(resetForm, {'attr': {'class': 'form'}}) }}
+	        {{ form.repeated(resetForm.plainPassword) }}
+
+	        <button class="btn btn-primary form__submit">Zapisz</button>
+	    {{ form_end(resetForm) }}
+	</section>
+{% endblock %}

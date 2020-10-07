@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Dodaj nową książkę{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">Dodaj nową książkę</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(bookForm, {'attr': {'class': 'form book__form'}}) }}
+            {{ form_widget(bookForm._token) }}
+            {{ form.input(bookForm.title) }}
+            {{ form.input(bookForm.isbn) }}
+            {{ form.input(bookForm.releasedAt) }}
+            {{ form.checkbox(bookForm.available) }}
+            {{ form.input(bookForm.quantity) }}
+            {{ form.input(bookForm.description) }}
+            {{ form.input(bookForm.price) }}
+            {{ form.input(bookForm.coverType) }}
+            {{ form.input(bookForm.coverImage) }}
+            {{ form.input(bookForm.author) }}
+            {{ form.input(bookForm.genres) }}
+            {{ form.input(bookForm.tags) }}
+            
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">Zapisz</button>
+
+            <a href="{{ path('book_index') }}" class="d-block mb-4">Index gatunków</a>
+        {{ form_end(bookForm, {'render_rest': false}) }}
+	</section>	
+{% endblock %}

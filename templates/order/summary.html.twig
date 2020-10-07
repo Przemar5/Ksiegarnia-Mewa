@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Podsumowanie{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header mb-2">Dane zamówienia</h2>
+
+		<p>Imię: {{ order.name }}</p>
+		<p>Nazwisko: {{ order.surname }}</p>
+		<p>Kraj: {{ order.country }}</p>
+		<p>Miasto: {{ order.city }}</p>
+		<p>Adres do odbioru zamówienia: {{ order.address }}</p>
+		<p>Kod pocztowy: {{ order.postalCode }}</p>
+		<p>Telefon kontaktowy: {{ order.phone }}</p>
+		<p>Dodatkowy telefon: {{ order.additionalPhone }}</p>
+		<p>Zamówienie:
+			<ul type="dot" class="ml-4">
+				{% set i = 0 %}
+				{% for product, ammount in order.products %}
+					<li>{{ ammount }} &times; {{ books[i].title }}</li>
+					{% set i = i + 1 %}
+				{% endfor %}
+			</ul>
+		</p>
+		<p>Cena: {{ order.price }} PLN</p>
+		<p>Forma płatności: {{ order.paymentForm }}</p>
+
+		<article class="my-3">
+			<h2 class="mb-2">Dane płatności</h2>
+
+			{% if order.paymentForm == 'Płatność przy odbiorze' %}
+				<p>Wybrałeś formę płatności przy odbiorze.</p>
+
+				<p>Status przesyłki: 
+					{% if order.status == 'confirmed' %}
+						Przesyłki jeszcze nie nadano.
+					{% elseif order.status == 'send' %}
+						Przesyłka została wysłana.
+					{% endif %}
+				</p>
+			{% endif %}
+		</article>
+	</section>
+{% endblock %}

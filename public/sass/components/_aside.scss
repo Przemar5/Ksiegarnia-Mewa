@@ -1,0 +1,17 @@
+.aside {
+	width: $width-aside;
+	padding: 2.25rem 1.5rem;
+	display: block;
+
+	&__header {
+		padding-bottom: .5rem;
+		border-bottom: solid 1px $color-light;
+		margin-bottom: 1.5rem;
+	}
+}
+
+@media screen and (max-width: 750px) {
+	.aside {
+		width: 100%;
+	}
+}

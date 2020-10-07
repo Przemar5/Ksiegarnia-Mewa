@@ -1,0 +1,11 @@
+<h1>Witaj!</h1>
+
+<p>Słyszeliśmy, że próbujesz odzyskać swoje hasło. Jeśli to nie ty chcesz odzyskać hasło, po prostu zignoruj ten link.</p>
+
+<p>Aby zresetować hasło, kliknij poniższy link.</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Link straci ważność w ciągu {{ tokenLifetime|date('g') }} godzin.</p>
+
+<p>Miłego dnia!</p>

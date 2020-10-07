@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Edytuj dane{% endblock %}
+
+{% block main %}
+    <section class="section registration center">
+        <h2 class="section__header">Edytuj konto</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(userEditForm, {'attr': {'class': 'form user__form'}}) }}
+            {{ form_widget(userEditForm._token) }}
+            {{ form.input(userEditForm.email) }}
+            {{ form.input(userEditForm.country) }}
+            {{ form.input(userEditForm.city) }}
+            {{ form.input(userEditForm.address) }}
+            {{ form.input(userEditForm.postalCode) }}
+            {{ form.input(userEditForm.phone) }}
+            {{ form.input(userEditForm.additionalPhone) }}
+            {{ form.repeated(userEditForm.password) }}
+            
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">Zapisz</button>
+        {{ form_end(userEditForm, {'render_rest': false}) }}
+    </section>
+{% endblock %}

@@ -1,0 +1,57 @@
+.wrapper {
+	max-width: 124rem;
+	margin: 0 auto;
+}
+
+.content-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: stretch;
+	align-content: stretch;
+}
+
+$lengths: (0, .5rem, 1rem, 1.5rem, 2rem, 3rem);
+
+@mixin widths($name, $prop, $lengths) {
+    @for $i from 1 through length($lengths) {
+        .#{$name}-#{$i - 1} {
+            #{$prop}: nth($lengths, $i);
+        }
+
+        .#{$name}y-#{$i - 1} {
+            #{$prop}-top: nth($lengths, $i);
+            #{$prop}-bottom: nth($lengths, $i);
+        }
+
+        .#{$name}x-#{$i - 1} {
+            #{$prop}-left: nth($lengths, $i);
+            #{$prop}-right: nth($lengths, $i);
+        }
+
+        .#{$name}t-#{$i - 1} {
+            #{$prop}-top: nth($lengths, $i);
+        }
+
+        .#{$name}l-#{$i - 1} {
+            #{$prop}-left: nth($lengths, $i);
+        }
+
+        .#{$name}r-#{$i - 1} {
+            #{$prop}-right: nth($lengths, $i);
+        }
+
+        .#{$name}b-#{$i - 1} {
+            #{$prop}-bottom: nth($lengths, $i);
+        }
+    }
+}
+
+@include widths('m', 'margin', $lengths);
+@include widths('p', 'padding', $lengths);
+
+
+@media screen and (max-width: 750px) {
+    .content-wrapper {
+        flex-direction: column;
+    }    
+}

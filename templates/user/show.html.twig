@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - {{ user.name }} {{ user.surname }}{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header mb-3">{{ user.name }} {{ user.surname }}</h2>
+
+		{% if app.user == user %}
+			<a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-primary mr-2 mb-2">
+				Edytuj dane
+			</a>
+
+			<a href="{{ path('app_logout') }}" class="btn btn-primary">Wyloguj się</a>
+
+			<form action="{{ path('user_delete', {'id': user.id}) }}" method="post" class="mr-2 mb-2">
+				<input type="hidden" name="_token" value="{{ csrf_token('user_delete' ~ user.id) }}">
+				<button type="submit" class="btn btn-danger">Usuń konto</button>
+			</form>
+		{% endif %}
+	</section>	
+{% endblock %}

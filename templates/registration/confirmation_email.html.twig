@@ -1,0 +1,11 @@
+<h1>Witaj! Potwierdź swoją tożsamość.</h1>
+
+<p>
+    Aby potwierdzić swoją tożsamość, kliknij w poniższy link: <br><br>
+    <a href="{{ signedUrl|raw }}">Potwierdź email</a>.
+    Ten link straci ważność za {{ expiresAt|date('g') }} godziny.
+</p>
+
+<p>
+    Miłego dnia!
+</p>

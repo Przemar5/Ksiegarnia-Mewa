@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Dodaj nowego autora{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">Dodaj nowego autora</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(authorForm, {'attr': {'class': 'form author__form'}}) }}
+            {{ form_widget(authorForm._token) }}
+            {{ form.input(authorForm.name) }}
+            {{ form.input(authorForm.surname) }}
+            {{ form.input(authorForm.pseudonym) }}
+            {{ form.input(authorForm.born) }}
+            {{ form.input(authorForm.died) }}
+            {{ form.input(authorForm.country) }}
+            {{ form.input(authorForm.description) }}
+            {{ form.input(authorForm.genres) }}
+
+            {% include('includes/regulations_modal.html.twig') %}
+            
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">Zapisz</button>
+
+            <a href="{{ path('author_index') }}" class="d-block mb-4">Index autorów</a>
+        {{ form_end(authorForm) }}
+	</section>	
+{% endblock %}

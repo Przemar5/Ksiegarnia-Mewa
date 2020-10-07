@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - {{ tag.name }}{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header">{{ tag.name }}</h2>
+
+        {% import 'macros/form.html.twig' as form %}
+
+        {{ form_start(tagForm, {'attr': {'class': 'form tag__form'}}) }}
+            {{ form_widget(tagForm._token) }}
+            {{ form.input(tagForm.name) }}
+            
+            <button type="submit" class="form__submit btn btn-primary mt-3 mb-2">Zapisz</button>
+
+            <a href="{{ path('tag_show', {'id': tag.id}) }}" class="d-inline-block mb-2 mr-2">Pokaż tag</a>
+            
+            <a href="{{ path('tag_delete', {'id': tag.id}) }}" class="d-inline-block mb-2 text-danger">
+                Usuń tag
+            </a>
+
+            <a href="{{ path('tag_index') }}" class="d-block mb-4">Index tagów</a>
+        {{ form_end(tagForm) }}
+	</section>	
+{% endblock %}

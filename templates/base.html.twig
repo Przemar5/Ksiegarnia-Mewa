@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="author" content="Przemysław Krogulski">
+		<meta name="theme-color" content="#1000c8">
+
+        <title>Księgarnia Mewa{% block title %}{% endblock %}</title>
+
+        <!-- Scripts -->
+		<!-- Font awesome -->
+		<script src="https://kit.fontawesome.com/f6b4a65528.js" crossorigin="anonymous"></script>
+
+        <!-- Vue -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="{{ asset('js/navigation.js') }}" defer></script>
+
+		<!-- Bootstrap -->
+<!--
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous" defer></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" defer></script>
+-->
+		<!-- Styles -->
+		<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+
+        <style>
+            #searchModal article {
+                padding: 1rem;
+            }
+        </style>
+
+		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+    	{% include('includes/navigation.html.twig') %}
+
+    	<!-- Header -->
+    	<header class="header">
+            <h1>Księgarnia Mewa</h1>
+    		<picture>
+    			<source media="(min-width: 1281px)" srcset="{{ asset('images/app/hero-lg.jpg') }}">
+    			<source media="(min-width: 641px)" srcset="{{ asset('images/app/hero-md.jpg') }}">
+    			<source media="(max-width: 640px)" srcset="{{ asset('images/app/hero-sm.jpg') }}">
+    			<img src="{{ asset('images/app/hero-lg.jpg') }}" alt="serce z dwóch kartek książki" style="width:100%; vertical-align:middle;">
+    		</picture>
+    	</header>
+
+    	<div class="wrapper content-wrapper">
+    		{% block aside %}{% endblock %}
+
+	    	<!-- Main -->
+	    	<main class="text-center">
+	    		<noscript>Masz wyłączony javascript i niektóre funkcjonalności mogą być wyłączone.</noscript>
+
+	        	{% block main %}{% endblock %}
+	    	</main>
+
+	    </div>
+
+	    <footer class="footer">
+            <p>
+                Przemysław Krogulski &copy; <time datetime="2020">2020</time>
+            </p>
+            <a href="https://github.com/przemar5" class="my-1" target="_blank">Github</a>
+            <a href="https://przemar5.github.io/przemekkrogulski.github.io/" target="_blank">Moja strona</a>
+	    </footer>
+
+        {% include 'includes/_modal.html.twig' with {
+            'id': 'searchModal',
+            'class': 'd-none',
+            'header': 'Szukaj książki',
+            'content': '<form class="search__form form" action="' ~ path('home') ~ '" method="get">
+                <label class="form__control my-0">
+                    <span class="form__control-title"></span>
+                    <input type="search" name="tytul" class="form__control-input" title="Szukaj książki" placeholder="Szukana książka...">
+                </label>
+
+                <button type="submit" class="form__control-submit btn btn-primary btn-block" title="Szukaj">
+                    <span class="fas fa-search"></span> Szukaj
+                </button>
+            </form>'
+        } %}
+
+        <script src="{{ asset('js/order.js') }}" defer></script>
+        <script>
+            let searchModal = document.getElementById('searchModal')
+            let searchShow = document.getElementById('searchShow')
+
+            searchShow.addEventListener('click', function (e) {
+                e.preventDefault()
+                searchModal.classList.remove('d-none')
+            })
+            //searchModal.classList.add('d-none')
+        </script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

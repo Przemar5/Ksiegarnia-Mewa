@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - {{ book.title }}{% endblock %}
+
+{% block aside %}
+	{% include('includes/aside.html.twig') %}
+{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header mb-3">{{ book.title }}</h2>
+
+		<img class="book-tile__img" src="{{ asset('images/app/book_covers/' ~ book.cover) }}" style="cursor:default; display: flex;">
+
+		<p class="my-2">
+			Autor: 
+			{% if book.author != null %}
+				<a href="{{ path('author_show', {'id': book.author.id}) }}">
+					{{ book.author }}
+				</a>
+			{% else %}
+				-
+			{% endif %}
+		</p>
+
+		<p class="my-2">Wydano: {{ book.releasedAt ?? '-' }}</p>
+
+		<p class="my-2">Gatunki: {% for genre in book.genres %}
+			<a href="{{ path('genre_show', {'id': genre.id}) }}">{{ genre.name }}</a>{{ (not loop.last) ? ',' : '' }}
+		{% endfor %}</p>
+
+		<p class="my-2">Dostępna ilość: {{ (book.quantity - book.reserved > 0) ? book.quantity - book.reserved : 0 }}</p>
+
+		<p class="my-2">{{ book.description }}</p>
+
+		<div class="mt-2 mb-3">
+			<form action="{{ path('rating_rate', {'id': book.id}) }}" method="post" class="form rating-rate"  {% if not is_granted('ROLE_USER') %}disabled{% endif %}>
+				<input type="hidden" name="_token" value="{{ csrf_token('rating_rate' ~ book.id) }}">
+				<input type="range" name="points" class="rating-rate__stars mr-2" min="0" max="100" step="1" value="{{ (book.ratings|reduce((carry, rating) => carry + rating.points) / ((book.ratings|length > 0) ? book.ratings|length : 1)) * 20 }}">
+				<input type="hidden" class="rating-rate__is-logged d-block" value="{{ (is_granted('ROLE_USER')) ? '1' : '0' }}">
+				<button type="submit" class="rating-rate__submit btn btn-primary mr-2">Oceń</button>
+
+				<small class="rating-rate__summary mr-2">
+					Średnia:&nbsp;<span class="rating-rate__mean">{{ book.ratings|reduce((carry, rating) => carry + rating.points) / ((book.ratings|length > 0) ? book.ratings|length : 1) }}</span>
+				</small>
+
+				<small class="rating-rate__count mr-2">
+					Ilość&nbsp;ocen:&nbsp;<span class="rating-rate__count-number">{{ book.ratings|length }}</span>
+				</small>
+
+				<small class="rating-rate__user-rating mr-2">
+					Twoja&nbsp;ocena:&nbsp;<span class="rating-rate__user-rating-value">{{ book.getUserRating(app.user).points ?? 'brak' }}</span>
+				</small>
+			</form>
+
+			<form action="{{ path('rating_undo', {'id': book.id}) }}" method="post" class="form rating-undo {{ (book.getUserRating(app.user) == null) ? 'd-none' : '' }}">
+				<input type="hidden" name="_method" value="delete">
+				<input type="hidden" name="_token" value="{{ csrf_token('rating_undo' ~ book.id) }}">
+				<button type="submit" class="rating-undo__submit">Cofnij&nbsp;ocenę</button>
+			</form>
+		</div>
+
+		{% if not is_granted('ROLE_USER') %}
+			{% include 'includes/_modal.html.twig' with {
+				'id': 'accessDeniedModal',
+				'header': 'Zaloguj się!', 
+				'content': '<a href="' ~ path('app_login') ~ '">Zaloguj się</a>, aby móc ocenić tę książkę.'
+			} %}
+		{% endif %}
+
+		{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{ path('book_edit', {'id': book.id}) }}" class="d-inline-block mb-2 mr-2">
+				Edytuj dane książki
+			</a>
+			
+			<a href="{{ path('book_delete', {'id': book.id}) }}" class="d-inline-block mb-2 text-danger">
+				Usuń książkę
+			</a>			
+		{% endif %}
+
+		<a href="{{ path('book_index') }}" class="d-block mb-4">
+			Indeks książek
+		</a>
+	</section>	
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		const ratingForm = document.querySelector('.rating-rate')
+		const rateRange = document.querySelector('.rating-rate__stars')
+		const rateBtn = document.querySelector('.rating-rate__submit')
+		let isLogged = document.querySelector('.rating-rate__is-logged')
+		if (isLogged != null) isLogged = isLogged.getAttribute('value')
+		const accessDeniedModal = document.getElementById('accessDeniedModal')
+		const steps = 5
+
+		const undoRatingForm = document.querySelector('.rating-undo')
+
+		const getRating = function (event) {
+			let rect = rateRange.getBoundingClientRect()
+			let offset = event.clientX - rect.left
+			return Math.floor(((offset / rateRange.offsetWidth) + 0.2) * steps)
+		}
+
+		rateRange.addEventListener('mousemove', function (e) {
+			let step = getRating(e)
+
+			rateRange.setAttribute('style', `background:linear-gradient(to right, #fc9905 0%, #fc9905 ${step * (100 / steps)}%, #eaeaea ${step * (100 / steps)}%, #eaeaea 100%)`)
+		})
+
+		rateRange.addEventListener('click', function (e) {
+			e.preventDefault()
+
+			if (isLogged == 1) {
+				let step = getRating(e)
+				let form = e.target.parentElement
+				let callback = function (form, response) {
+					rateRange.setAttribute('value', step * 20)
+					response = JSON.parse(response)
+
+					document.querySelector('.rating-rate__mean').innerHTML = response.mean
+					document.querySelector('.rating-rate__count-number').innerHTML = response.count
+					document.querySelector('.rating-rate__user-rating-value').innerHTML = response.userRating
+					document.querySelector('.rating-undo').classList.remove('d-none')
+				}
+				handleRequest(form, callback)
+			
+			} else {
+				if (accessDeniedModal != null)
+					accessDeniedModal.classList.remove('d-none')
+			}
+		})
+
+		undoRatingForm.addEventListener('submit', function (e) {
+			e.preventDefault()
+
+			let form = e.target
+			let callback = function (form, response) {
+				response = JSON.parse(response)
+
+				document.querySelector('.rating-rate__mean').innerHTML = response.mean
+				document.querySelector('.rating-rate__count-number').innerHTML = response.count
+				document.querySelector('.rating-rate__user-rating-value').innerHTML = response.userRating
+				document.querySelector('.rating-undo').classList.add('d-none')
+			}
+			handleRequest(form, callback)
+		})
+
+		rateBtn.classList.add('d-none')
+		if (accessDeniedModal != null) {
+			accessDeniedModal.classList.add('d-none')
+		}
+	</script>
+{% endblock %}

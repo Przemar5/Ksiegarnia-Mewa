@@ -1,0 +1,15 @@
+<span class="book-tile__btn-group">
+	<form action="{{ path('order_add_product', {'id': book.id}) }}" method="post" class="book-tile__form--add-product">
+		<input type="hidden" name="_token" value="{{ csrf_token('add_product' ~ book.id) }}">
+		<button type="submit" class="book-tile__btn-group--plus"></button>
+	</form>
+	<form class="book-tile__btn-group--sum" action="{{ path('order_change_product_ammount', {'id': book.id}) }}" method="post">
+		<input type="hidden" name="_token" value="{{ csrf_token('change_product_ammount' ~ book.id) }}">
+		<input type="number" name="ammount" min="0" max="{{ book.quantity - book.reserved }}" class="book-tile__btn-group--ammount" value="{{ app.session.get('order')[book.id] ?? 0 }}" title="Kliknij enter by zatwierdzić">
+		<button type="submit" style="display:hidden;"></button>
+	</form>
+	<form action="{{ path('order_remove_product', {'id': book.id}) }}" method="post" class="book-tile__form--remove-product">
+		<input type="hidden" name="_token" value="{{ csrf_token('remove_product' ~ book.id) }}">
+		<button type="submit" class="book-tile__btn-group--minus"></button>
+	</form>
+</span>

@@ -1,0 +1,64 @@
+.btn {
+	display: inline-block;
+	text-align: center;
+	font-size: 1.6rem;
+	padding: .6rem 1.5rem;
+	cursor: pointer;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	border-radius: 4px;
+}
+
+.btn-sm {
+	font-size: 1.6rem;
+	padding: .5rem 1.25rem;
+}
+
+.btn-primary {
+	background-color: $color-primary;
+	color: $color-light;
+
+	&:focus,
+	&:hover,
+	&:active {
+		background-color: darken($color-primary, 5%);
+		color: $color-light;
+	}
+}
+
+.btn-secondary {
+	background-color: $color-secondary;
+	color: $color-light;
+
+	&:focus,
+	&:hover,
+	&:active {
+		background-color: darken($color-secondary, 5%);
+		color: $color-light;
+	}
+}
+
+.btn-danger {
+	background-color: $color-danger;
+	color: $color-light;
+
+	&:focus,
+	&:hover,
+	&:active {
+		background-color: darken($color-danger, 5%);
+		color: $color-light;
+	}	
+}
+
+.btn-outline-primary {
+	background-color: transparent;
+	color: $color-primary;
+	border: 1px solid $color-primary;
+
+	&:focus,
+	&:hover {
+		background-color: $color-primary;
+		color: $color-light;
+	}
+}
+

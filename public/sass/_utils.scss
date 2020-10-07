@@ -1,0 +1,109 @@
+/**
+ * Text colors
+ */
+
+.text-dark {
+	color: $color-dark;
+}
+
+.text-light {
+	color: $color-light;
+}
+
+.text-primary {
+	color: $color-primary;
+}
+
+.text-secondary {
+	color: $color-secondary;
+}
+
+.text-danger {
+	color: $color-danger;
+}
+
+/**
+ * Background colors
+ */
+
+.bg-dark {
+	background-color: $color-dark;
+}
+
+.bg-light {
+	background-color: $color-light;
+}
+
+.bg-primary {
+	background-color: $color-primary;
+}
+
+.bg-secondary {
+	background-color: $color-secondary;
+}
+
+.bg-danger {
+	background-color: $color-danger;
+}
+
+/**
+ * Effects
+ */
+.blurred {
+	filter: blur(6px);
+    -webkit-filter: blur(6px);
+}
+
+/**
+ * Primitives
+ */
+.d-none {
+	display: none !important;
+}
+
+.d-block {
+	display: block !important;
+}
+
+.d-inline-block {
+	display: inline-block !important;
+}
+
+/**
+ * Justify content
+ */
+/*
+.left,
+.right,
+.center {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.left {
+	align-content: flex-start;
+}
+
+.center {
+	align-content: center;
+}
+
+.right {
+	align-content: flex-end;
+}
+*/
+
+.left {
+	text-align: left;
+}
+
+.center {
+	width: fit-content !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.right {
+	text-align: right;
+}

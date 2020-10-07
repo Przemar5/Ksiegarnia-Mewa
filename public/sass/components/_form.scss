@@ -1,0 +1,45 @@
+.form {
+
+	&__control {
+		display: block;
+		margin: 1.25rem 0;
+
+		&-title {
+			display: block;
+			margin-bottom: .5rem;
+		}
+
+		&-input {
+			width: 100%;
+		}
+
+		&-radios {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			width: 100%;
+		}
+
+		&-error {
+			display: block;
+			color: $color-danger;
+			font-style: italic;
+		}
+
+		&-help {
+			display: block;
+			color: $color-muted;
+			font-style: italic;
+		}
+	}
+
+	&__submit {
+		width: 100%;
+	}
+}
+
+.registration__form,
+.login__form {
+	max-width: 42rem;
+	width: 100%;
+}

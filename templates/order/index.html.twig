@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Podsumowanie{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header mb-2">Dane zamówienia</h2>
+
+		<table id="ordersTable" class="table table-responsive table-hovered">
+			<thead>
+				<th>Id</th>
+				<th>Użytkownik</th>
+				<th>Forma płatności</th>
+				<th>Cena</th>
+				<th>Status przesyłki</th>
+				<th>Zmień status</th>
+			</thead>
+			<tbody>
+				{% if orders|length > 0 %}
+					{% for order in orders %}
+						<tr>
+							<td>{{ order.id }}</td>
+							<td>
+								<a href="{{ path('user_show', {'id': order.user.id}) }}">
+									{{ order.user.name }} {{ order.user.surname }}
+								</a>
+							</td>
+							<td>{{ order.paymentForm }}</td>
+							<td>{{ order.price }} PLN</td>
+							<td>
+								{% if order.status == 'confirmed' %}
+									Przesyłki jeszcze nie nadano.
+								{% elseif order.status == 'send' %}
+									Przesyłka została wysłana.
+								{% endif %}
+							</td>
+							<td>
+								<form action="{{ path('order_change_status', {'id': order.id}) }}" method="post">
+									<input type="hidden" name="_token" value="{{ csrf_token('order_change_status' ~ order.id) }}">
+									<select name="order_status">
+										{% if order.status == 'confirmed' %}
+										<option value="send">Wysłano</option>
+										{% elseif order.status == 'send' %}
+										<option value="completed">Zrealizowano</option>
+										{% endif %}
+									</select>
+									<button type="submit" class="btn btn-sm btn-primary">Aktualizuj</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				{% else %}
+					<tr>
+						<td colspan="6">Nie ma żadnych zamówień do realizacji.</td>
+					</tr>
+				{% endif %}
+			</tbody>
+		</table>
+	</section>
+{% endblock %}

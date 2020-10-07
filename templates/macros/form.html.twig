@@ -1,0 +1,66 @@
+{% macro input(input) %}
+<label class="form__control">
+    <span class="form__control-title">{{ input.vars.label }}</span>
+    {{ form_widget(input, {'attr': {'class': 'form__control-input', 'title': input.vars.help}}) }}
+    {% if input.vars.help is defined %}
+        <small class="form__control-help">{{ input.vars.help }}</small>
+    {% endif %}
+    {% if input.vars.errors|length > 0 %}
+    	<small class="form__control-error">{{ input.vars.errors[0].message }}</small>
+    {% endif %}
+</label>
+{% endmacro %}
+
+
+{% macro repeated(input) %}
+<label class="form__control">
+	<span class="form__control-title">{{ input.first.vars.label }}</span>
+    {{ form_widget(input.first, {'attr': {'class': 'form__control-input'}}) }}
+    {% if input.first.vars.help is defined %}
+        <small class="form__control-help">{{ input.vars.help }}</small>
+    {% endif %}
+    {% if input.first.vars.errors|length > 0 %}
+    	<small class="form__control-error">{{ input.first.vars.errors[0].message }}</small>
+    {% endif %}
+</label>
+
+<label class="form__control">
+	<span class="form__control-title">{{ input.second.vars.label }}</span>
+    {{ form_widget(input.second, {'attr': {'class': 'form__control-input'}}) }}
+</label>
+{% endmacro %}
+
+
+{% macro radios(input) %}
+<div class="form__control">
+    <span class="form__control-title">{{ input.vars.label }}</span>
+    <div class="form__control-radios">
+        {% for key, val in input.vars.choices %}
+            <label>
+                <input type="radio" name="{{ input.vars.full_name }}" required="required" value="{{ val.value }}" {{ (input.vars.value == val.value) ? 'checked' : '' }}>
+                {{ val.label|trans }}
+            </label>
+        {% endfor %}
+    </div>
+    {% if input.vars.help is defined %}
+        <small class="form__control-help">{{ input.vars.help }}</small>
+    {% endif %}
+    {% if input.vars.errors|length > 0 %}
+    	<small class="form__control-error">{{ input.vars.errors[0].message }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+
+{% macro checkbox(input, label) %}
+<label class="form__control">
+    {{ form_widget(input) }}
+    {{ (label ?? input.vars.label)|raw }}
+    {% if input.vars.help is defined %}
+        <small class="form__control-help">{{ input.vars.help }}</small>
+    {% endif %}
+    {% if input.vars.errors|length > 0 %}
+    	<small class="form__control-error">{{ input.vars.errors[0].message }}</small>
+    {% endif %}
+</label>
+{% endmacro %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Odzyskiwanie hasła, sprawdź email{% endblock %}
+
+{% block main %}
+	<section class="section center">
+	    <p>Wysłaliśmy na twój email link do odzyskiwania hasła. Jest on ważny przez {{ tokenLifetime|date('g') }} godziny.</p>
+	    <p>Jeśli nie dostałeś emaila, sprawdź spam albo <a href="{{ path('app_forgot_password_request') }}">spróbuj ponownie</a>.</p>
+	</section>
+{% endblock %}

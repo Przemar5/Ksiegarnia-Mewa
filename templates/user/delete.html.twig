@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - {{ user.name }} {{ user.surname }}{% endblock %}
+
+{% block main %}
+	<section class="section">
+		<h2 class="section__header mb-2">Usuwanie konta</h2>
+		{% if app.user == user %}
+			<p class="mb-2">Czy na pewno chcesz usunąć swoje konto?</h2>
+		{% else %}
+			<p class="mb-2">Czy na pewno chcesz usunąć konto użytkownika "{{ user.name }} {{ user.surname }}"?</p>
+		{% endif %}
+
+		<p class="mb-3">Ta akcja jest nieodwracalna.</p>
+
+		{% if is_granted('ROLE_ADMIN') or app.user == user %}
+			<form action="{{ path('user_delete', {'id': user.id}) }}" method="post" class="mr-2 mb-2">
+				<input type="hidden" name="_method" value="delete">
+				<input type="hidden" name="_token" value="{{ csrf_token('user_delete_confirm' ~ user.id) }}">
+				<button type="submit" class="btn btn-danger">Usuń konto</button>
+			</form>
+		{% endif %}
+	</section>	
+{% endblock %}
